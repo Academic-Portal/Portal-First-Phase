@@ -3,7 +3,6 @@ import './Issues.css'
 import IssueCard from './IssueCard.js';
 import { Button } from '@material-ui/core';
 import Issue from './DiscussionThread/Comment';
-import NavBar from '../NavBar';
 
 class Issues extends Component {
 
@@ -36,7 +35,6 @@ class Issues extends Component {
     render() {
         return (
             <div>
-                <NavBar />
                 <div className="issues">
                     <div className="issues__title">
                         <h1>Issues</h1>
