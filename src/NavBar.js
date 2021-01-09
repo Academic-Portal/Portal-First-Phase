@@ -1,6 +1,7 @@
 import React, {useContext} from "react";
 import { Navbar, Nav, Form, Button, FormControl } from "react-bootstrap";
-import {useHistory} from 'react-router-dom';
+import {useHistory, Link} from 'react-router-dom';
+import './NavBar.css';
 
 import UserContext from './context/UserContext';
 
@@ -29,11 +30,11 @@ function NavBar() {
     return (
     <div>
         <Navbar bg="dark" variant="dark">
-            <Navbar.Brand href="/Home">Academic Portal IITT</Navbar.Brand>
+            <Navbar.Brand>Academic Portal IITT</Navbar.Brand>
                 <Nav className="mr-auto">
-                    <Nav.Link href="/Home">Home</Nav.Link>
-                    <Nav.Link href="/Issues">Issues</Nav.Link>
-                    <Nav.Link href="/StudyMaterial">study material</Nav.Link>
+                    <Link to="/" className="nav-links">Home</Link>
+                    <Link to="/Issues" className="nav-links">Issues</Link>
+                    <Link to="/StudyMaterial" className="nav-links">study material</Link>
                     {
                         userData.user ?
                         <Button onClick={logout}>Logout</Button> :
