@@ -1,39 +1,32 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect, useContext, useState } from 'react'
 import './Issues.css'
 import IssueCard from './IssueCard.js';
 import { Button } from '@material-ui/core';
 import Issue from './DiscussionThread/Comment';
 
-class Issues extends Component {
+// authuntication
+import {useHistory} from 'react-router-dom';
+import UserContext from '../context/UserContext';
 
 
-    constructor(props) {
-        super(props);
 
-        this.addIssue= this.addIssue.bind(this);
-        this.handleIssueEditorInputChange = this.handleIssueEditorInputChange.bind(this);
+export default function Issues() {
 
-        this.state = {
-            issues: [],
-            newIssueBody: '',
+    const [issues, setIssues] = useState([]);
+    const [newIssueBody, setNewIssueBody] = useState('');
+
+    const {userData} = useContext(UserContext);
+    const history = useHistory();
+
+    useEffect(() => {
+        if(!userData.user) {
+            history.push("/login");
         }
-    }
+    });
 
-    addIssue() {
-        const newState = Object.assign({}, this.state);
-        newState.issues.push(this.state.newIssueBody);
-        newState.newIssueBody = '';
-        this.setState(newState);
-    }
 
-    handleIssueEditorInputChange(e) {
-        this.setState({
-            newIssueBody: e.target.value,
-        })
-    }
-
-    render() {
-        return (
+    return (
+        <div>
             <div>
                 <div className="issues">
                     <div className="issues__title">
@@ -42,7 +35,7 @@ class Issues extends Component {
 
                     <div className="issueCard__list">
                         {
-                            this.state.issues.map((issue, idx) => {
+                            issues.map((issue) => {
                                 return(
                                     <IssueCard title={issue}/>
                                 );
@@ -52,19 +45,22 @@ class Issues extends Component {
 
                 <div className="panel panel-default post-editor">
                     <div className="panel-body">
-                        <textarea   className="form-control post-editor-input" 
-                                    name="" id="" 
-                                    cols="30" 
-                                    rows="3"
-                                    placeholder='please post your issue here...'
-                                    value={this.state.newIssueBody}
-                                    onChange={this.handleIssueEditorInputChange}
-                                    >
-                        </textarea>
-                        <button className="btn btn-success post-editor-button" 
-                                onClick={this.addIssue}>
-                            Post
-                        </button>
+                            <textarea   className="form-control post-editor-input" 
+                                        name="" id="" 
+                                        cols="30" 
+                                        rows="3"
+                                        placeholder='please post your issue here...'
+                                        onChange={e => {
+                                            setNewIssueBody(e.target.value);
+                                        }}
+                                        >
+                            </textarea>
+                            <button className="btn btn-success post-editor-button" 
+                                    onClick={e => {
+                                        setIssues([...issues, newIssueBody]);
+                                    }}>
+                                Post
+                            </button>
                     </div>
         
                     </div>
@@ -72,11 +68,6 @@ class Issues extends Component {
 
             </div>
         );
-    }
-
-
-    
-    
+        </div>
+    );
 }
-
-export default Issues;

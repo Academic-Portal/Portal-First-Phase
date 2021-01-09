@@ -1,10 +1,10 @@
-import React from 'react'
+import React, {useEffect, useContext} from 'react'
 import './IssueCard.css'
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { Link } from 'react-router-dom';
 
-
 function IssueCard(props) {
+
     return (
         <div>
             
@@ -12,12 +12,6 @@ function IssueCard(props) {
                 <ErrorOutlineIcon fontSize="small" htmlColor="#22863a"/>
                 <div>
                     <p className="issueCard__title">name1</p>
-                    {/* <Link to={{
-                        pathname: '/DiscussionThread',
-                        aboutProps: {
-                            title: "from issuecard"
-                        }
-                    }}> {props.title} </Link> */}
                     <Link to={{
                         pathname: '/DiscussionThread',
                         aboutProps: {
