@@ -1,0 +1,58 @@
+.dicussion-title {
+    text-align: center;
+    padding: 1rem;
+    color: #000 !important;
+}
+
+.post-editor {
+    margin: 1em 20%;
+}
+
+.post-editor-button {
+    float: right;
+    margin-top: 1em;
+}
+
+.post-body {
+    margin: 1em 20%;
+    border: 1px solid #000;
+    padding: 1rem;
+    border-radius: 5px;
+    text-align: left;
+}
+
+@media(max-width: 900px) {
+    .post-editor {
+        margin: 1em;
+    }
+
+    .post-body {
+        margin: 1em;
+    }
+}
+
+
+/* return to issues_button */
+
+.return-issues-button {
+
+    border-width: 1px !important;
+    border-color: #33AAA3 !important;
+    color: var(--untwin-color) !important;
+    font-weight: 900 !important;
+    text-transform: inherit !important;
+    height: 30px !important;
+    margin-top: 20px !important;
+  
+  }
+  
+  .return-issues-button:hover {
+    color: white !important;
+    background-color: var(--untwin-color) !important;
+  }
+
+  .return-button-div {
+      align-items: left;
+      text-align: left;
+      padding: 0 2rem;
+  }
