@@ -17,63 +17,43 @@ class UploadMetadata extends Component {
             name: '',
             optradio: 'assignments',
             selectedfile: null,
-            redirect: false
+            redirect: false,
+            redirectIfnotAuthed: false,
+            loading: false
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
+      }
+
+      componentDidMount(){
+        axios.get("http://localhost:3001/api/StudyMaterial/upload")
+          .then((response) =>{
+            if(response.data.authDone == 0){
+              this.setState({redirectIfnotAuthed: true});
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          })
       }
 
       
     
       handleSubmit = (e) => {
         e.preventDefault();
-        // console.log(window.location.href)
-        var code = (window.location.href)
-        // console.log(code)
-        var ind = code.lastIndexOf('scope');
-        // console.log(ind);
-        // console.log(code[ind]);
-        var code1 = code.substring(42,ind-1);
-        // console.log(code1)
 
         let currentComponent = this;
 
-        // console.log(this.state);
+        this.setState({ loading: true });
+
         var formData = new FormData();
-        // const filedata = e.target.files[0];
+        
         formData.append('file', this.state.selectedfile);
         formData.append('filename', this.state.filename);
         formData.append('courseno', this.state.courseno);
         formData.append('branch', this.state.branch);
         formData.append('name', this.state.name);
         formData.append('optradio', this.state.optradio);
-        formData.append('code', code1);
-
-        // console.log(formData.get('file'));
-        // const options = {
-        //     method: "POST",
-        //     body: formData,
-        //     // If you add this, upload won't work
-        //     headers: {
-        //       'Content-Type': 'multipart/form-data',
-        //     }
-        //   };
-        //   fetch("http://localhost:3001/api/uploadMetadata", options);
-
-
-        // axios.post('http://localhost:3001/api/uploadMetadata', formData,{
-        //     headers: {
-        //         'Content-Type': 'multipart/form-data',
-        //         
-        //     }
-        // }
-        // )
-        //     .then((response) =>{
-
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //     })
 
         axios({
             method: 'post',
@@ -108,10 +88,20 @@ class UploadMetadata extends Component {
       };
 
       render(){
-        const{filename, courseno, branch, name, redirect} = this.state
+        const{filename, courseno, branch, name, redirect, redirectIfnotAuthed, loading} = this.state
         
+        if(redirectIfnotAuthed){
+          return <Redirect to ='/StudyMaterial' />;
+        }
+
         if(redirect){
             return <Redirect to ='/StudyMaterial' />;
+        }
+
+        if(loading){
+          return (
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" />
+          )
         }
 
           return(

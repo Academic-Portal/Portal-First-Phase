@@ -7,7 +7,8 @@ import Issues from "./issues/Issues";
 import DiscussionThread from './issues/DiscussionThread/DiscussionThread';
 
 import StudyMaterial from './study_material/StudyMaterial';
-import UploadMetadata from './study_material/UploadMetadata'
+import UploadMetadata from './study_material/UploadMetadata';
+import GoogleCallback from './study_material/GoogleCallback';
 
 function Routes() {
     return(
@@ -28,6 +29,7 @@ function Routes() {
         {/* StudyMaterial component */}
         <Route path="/StudyMaterial" component={ StudyMaterial } />
         <Route path="/UploadMetadata" component={ UploadMetadata } />
+        <Route path="/GoogleCallback" component={ GoogleCallback } />
 
       </div>
     </BrowserRouter>

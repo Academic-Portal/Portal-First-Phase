@@ -61,7 +61,7 @@ const oAuth2Client = new google.auth.OAuth2(
   REDIRECT_URL
 );
 var authed = false;
-var chk = false;
+// var chk = false;
 
 // If modifying these scopes, delete token.json.
 const SCOPES =
@@ -72,16 +72,14 @@ const SCOPES =
   // });
 
 
-app.get("/StudyMaterial/upload", (req, res) => {
+app.get("/api/StudyMaterial/upload", (req, res) => {
   if (!authed) {
     // Generate an OAuth URL and redirect there
     var url = oAuth2Client.generateAuthUrl({
       access_type: "offline",
       scope: SCOPES,
     });
-    // console.log(url);
-    res.json({authUrl: url});
-    // res.redirect(url);
+    res.json({authUrl: url, authDone: 0});
   } else {
     var oauth2 = google.oauth2({
       auth: oAuth2Client,
@@ -89,6 +87,31 @@ app.get("/StudyMaterial/upload", (req, res) => {
     });
     res.json({authDone: 1});
 
+  }
+});
+
+app.post("/api/googleCallback", function (req, res) {
+  const code = req.body.data.code;
+  if (code) {
+    // Get an access token based on our OAuth code
+    oAuth2Client.getToken(code, function (err, tokens) {
+      if (err) {
+        console.log("Error authenticating");
+        console.log(err);
+      } else {
+        console.log("Successfully authenticated");
+        console.log(tokens)
+        oAuth2Client.setCredentials(tokens);
+
+
+        authed = true;
+        res.redirect("/api/StudyMaterial/upload");
+        // res.json({authDone: 1});
+      }
+    });
+  }
+  else{
+    res.json({authDone: 0});
   }
 });
 
@@ -119,6 +142,7 @@ const uploadSchema = {
 const Assignment = mongoose.model("assignment", uploadSchema);
 const Note = mongoose.model("note", uploadSchema);
 const CourseMaterial = mongoose.model("coursematerial", uploadSchema);
+const RecentUpload = mongoose.model("recentupload",uploadSchema);
 
 
 app.post('/api/search', function(req, res){
@@ -134,18 +158,15 @@ app.post('/api/search', function(req, res){
   Model.find({},function (err, items) {
     if(!err){
       if(items.length === 0){
-        // res.render("energy",{energy: "SOLAR", energylist: []});
         res.send(items);
       }
       else {
-        // res.render("energy",{energy: "SOLAR", energylist: cardItems});
         var filteredItems = [];
         items.forEach(item => {
           if(item.filename.toLowerCase().includes(req.body.searchString.toLowerCase())){
             filteredItems.push(item)
           }
         })
-        // console.log(filteredItems)
         res.send(filteredItems);
       }
     }
@@ -155,35 +176,13 @@ app.post('/api/search', function(req, res){
 
 
 app.post('/api/uploadMetadata', upload.single('file'), (req,res) => {
-  // console.log(req);
+  
   var filename1 = req.body.filename;
   var courseno1 = req.body.courseno;
   var branch1 = req.body.branch;
   var name1 = req.body.name;
   var optradio1 = req.body.optradio;
-  // const code = req.query.code;
-  const code = req.body.code;
-
-  if (code) {
-    // Get an access token based on our OAuth code
-    oAuth2Client.getToken(code, (err, tokens) => {
-      if (err) {
-        console.log("Error authenticating");
-        console.log(err);
-      } else {
-        console.log("Successfully authenticated");
-        console.log(tokens)
-        oAuth2Client.setCredentials(tokens);
-
-        // var oauth2 = google.oauth2({
-        //   auth: oAuth2Client,
-        //   version: "v2",
-        // });
-        chk = true;
-      }
-    });
-
-    if(chk){
+  
     upload.single('file')(req, res, (err)=> {
 
       if (err) {
@@ -211,9 +210,9 @@ app.post('/api/uploadMetadata', upload.single('file'), (req,res) => {
               console.error(err);
             } else {
               fs.unlinkSync(req.file.path)
-              // console.log("file  ", file);
-              const resource = {"role": "reader", "type": "anyone"};
-              drive.permissions.create({fileId: file.data.id, resource: resource}, (error, result)=>{
+              
+              const resource = {"role": "reader", "type": "domain", "domain": "iittp.ac.in"};
+              drive.permissions.create({fileId: file.data.id, sendNotificationEmail: false, resource: resource}, (error, result)=>{
               if (error) return;
               else{
                 var link1 = "https://drive.google.com/file/d/" + file.data.id + "/view" ;
@@ -243,23 +242,43 @@ app.post('/api/uploadMetadata', upload.single('file'), (req,res) => {
                   link: link1
                 });
               }
+
+                RecentUpload.find({}, function(err, items){
+                  if(!err){
+                    if(items.length === 3){
+                      RecentUpload.findOneAndDelete({},{sort: {'created_at': 1} }, function(err, item){
+                        if(err)
+                          console.log(err);
+                        else{
+                          console.log("deleted ", item);
+                        }
+                      });
+                    }
+                  }
+                });
+
+                var recentUpload = new RecentUpload({
+                  filename: filename1,
+                  courseno: courseno1,
+                  branch: branch1,
+                  name: name1,
+                  link: link1
+                });
+                recentUpload.save();
+
                 assgn.save();
               }
       //If this work then we know the permission for public share has been created
               });
+              res.json({UploadDone: 1});
             }
 
           }
         );
       }
       });
-      chk = false;
-      // chk2 = true
-    }
-  }
 
-  // console.log(req.body.filename);
-  res.json({UploadDone: 1});
+  
 
 });
 
