@@ -2,11 +2,38 @@ import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './StudyMaterial.css';
 import './Trial.css';
+<<<<<<< HEAD
 import {Redirect} from 'react-router-dom';
 import TableHeader from './TableHeader';
 
+=======
+>>>>>>> 5d6971ecdac4e5ab9e8f16182b4e75c630cadb6e
 import axios from 'axios';
+import { render } from 'react-dom';
+import TableHeader from './TableHeader';
 
+var tableInfo=[];
+function createCard(props)
+{
+  return(
+    <table>
+    <tr>
+    <td className="table1">{props.filename}</td>
+    <td className="table2">{props.branch}</td>
+    <td className="table3">{props.courseno}</td>
+    <td className="table4">{props.name}</td>
+    <td className="table5"><a href={props.link}>here</a></td>
+    </tr>
+    </table>
+  )
+}
+
+function show(props)
+{
+   return(props.map(createCard));
+}
+
+<<<<<<< HEAD
 function createCard(props)
 {
   return(
@@ -29,19 +56,36 @@ function show(props)
 
 class StudyMaterial extends Component {
   constructor(props) {
+=======
+class StudyMaterial extends Component
+{
+  constructor(props) 
+  {
+>>>>>>> 5d6971ecdac4e5ab9e8f16182b4e75c630cadb6e
     super(props);
 
-    this.state = {
+    this.state = 
+    {
       searchString: '',
       optradio: 'assignments',
+<<<<<<< HEAD
       redirect: false,
       tableInfo:[]
+=======
+      url: '',
+      // tableInfo:[]
+>>>>>>> 5d6971ecdac4e5ab9e8f16182b4e75c630cadb6e
     }
-
   }
 
+<<<<<<< HEAD
     handleClick = (e) => {
       axios.get('http://localhost:3001/api/StudyMaterial/upload')
+=======
+  componentDidMount() 
+  {
+    axios.get('http://localhost:3001/StudyMaterial/upload')
+>>>>>>> 5d6971ecdac4e5ab9e8f16182b4e75c630cadb6e
             .then((response) => {
                 // window.location.assign(response.data.authUrl);
                 console.log(response);
@@ -58,10 +102,19 @@ class StudyMaterial extends Component {
             .catch((err)=>{
                 console.log(err);
             })
-    };
-  
+<<<<<<< HEAD
+=======
+      
+        //     axios.get('http://localhost:3001/google/callback')
+        // .then((response) => {
+        //   console.log(response)
+        // })   
+  }
 
-  
+  handleClick = (e) => {  
+      window.location.assign(this.state.url);
+>>>>>>> 5d6971ecdac4e5ab9e8f16182b4e75c630cadb6e
+    };
 
   handleInputChange = (e) => {
     this.setState({
@@ -76,10 +129,19 @@ class StudyMaterial extends Component {
 
     axios.post('http://localhost:3001/api/search', this.state)
       .then((response) => {
+<<<<<<< HEAD
         // console.log(response.data);
         this.setState({
           tableInfo:response.data
         });
+=======
+        // tableInfo=this.
+        tableInfo=response.data;
+        // this.setState({
+        //   tableInfo:response.data
+        // })
+        console.log(response.data);
+>>>>>>> 5d6971ecdac4e5ab9e8f16182b4e75c630cadb6e
       })
       .catch(error => {
         console.log(error)
@@ -87,6 +149,7 @@ class StudyMaterial extends Component {
 
   };
 
+<<<<<<< HEAD
 render() {
     const{redirect, searchString, tableInfo} = this.state
 
@@ -96,6 +159,13 @@ render() {
 
     return(
         <div>
+=======
+  render() 
+  {
+    const{searchString} = this.state
+    return(
+            <div>
+>>>>>>> 5d6971ecdac4e5ab9e8f16182b4e75c630cadb6e
               <h2 style={{textAlign:'center'}}>StudyMaterial</h2>
 
               <form onSubmit={this.handleSubmit} className="study-material" >
