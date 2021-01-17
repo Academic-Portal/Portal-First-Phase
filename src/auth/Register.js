@@ -1,81 +1,33 @@
-import React, {useState, useContext} from 'react';
+import React, { useContext } from 'react';
+import GoogleLogin from 'react-google-login';
 import UserContext from '../context/UserContext';
-import { useHistory } from 'react-router-dom';
-import Axios from 'axios';
 
 export default function Register() {
-    
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
-    const [passwordCheck, setPasswordCheck] = useState();
-    const [displayName, setDisplayName] = useState();
-    const [error, setError] = useState();
 
-    const { setUserData } = useContext(UserContext);
-    const history = useHistory();
+    const {userData, setUserData} = useContext(UserContext);
 
-    const submit = async (e) => {
-
-        try {
-            e.preventDefault();
-            const newUser = {email, password, passwordCheck, displayName};
-            await Axios.post(
-                "http://localhost:5000/users/register",
-                newUser
-            );
-            const loginRes = await Axios.post(
-                "http://localhost:5000/users/login", {
-                    email,
-                    password,
-                });
-            setUserData({
-                token: loginRes.data.token,
-                user: loginRes.data.user,
-            });
-            localStorage.setItem("auth-token", loginRes.data.token);
-            history.push("/");
-
-        } catch (err) {
-            if(err.response.data.msg) {
-                setError(err.response.data.msg);
+    const responseGoogle = (e) => {
+        
+        setUserData(userData => ({ 
+            ...userData,      
+            token: e.profileObj.googleId,
+            user: {
+                email: e.profileObj.email,
+                displayName: e.profileObj.name,
             }
-        }
-    };
+        }));
 
+        console.log(userData);
+    }
+    
     return (
         <div className="page">
-            <h2>Register</h2>
-            {/* {error && 
-                <ErrorNotice message={error} clearError={() => setError(undefined)}/>} */}
-            <form className="form" onSubmit={submit}>
-                <label htmlFor="register-email">Email</label>
-                <input 
-                    id="register-email" 
-                    type="email"
-                    onChange={e => setEmail(e.target.value)}
-                />
-
-                <label htmlFor="register-password">Password</label>
-                <input 
-                    id="register-password" 
-                    type="password"
-                    onChange={e => setPassword(e.target.value)}    
-                />
-                <input 
-                    type="password" 
-                    placeholder="verify password"
-                    onChange={e => setPasswordCheck(e.target.value)}
-                />
-
-                <label htmlFor="register-display-name">Display Name</label>
-                <input 
-                    id="register-display-name" 
-                    type="text" 
-                    onChange={e => setDisplayName(e.target.value)}
-                />
-
-                <input type="submit" value="Register" />
-            </form>
+            <GoogleLogin
+            clientId="753929392522-t7al8gi7q8knpp3s8pdb40d556ni54qq.apps.googleusercontent.com"
+            buttonText="Login"
+            onSuccess={responseGoogle}
+            cookiePolicy={'single_host_origin'}
+            />
         </div>
     )
 }

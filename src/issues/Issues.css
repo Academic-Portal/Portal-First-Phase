@@ -1,8 +1,5 @@
 .issues__title {
     background-color: var(--untwin-color);
-    position: sticky;
-    z-index: 100;
-    top: 0;
     padding: 10px;
     height: fit-content;
 }

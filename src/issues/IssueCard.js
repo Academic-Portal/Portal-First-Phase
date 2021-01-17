@@ -1,9 +1,20 @@
-import React, {useEffect, useContext} from 'react'
-import './IssueCard.css'
+import React, {useEffect, useContext} from 'react';
+import './IssueCard.css';
+import DeleteIcon from '@material-ui/icons/Delete';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { Link } from 'react-router-dom';
 
+import apis from '../service/index';
+
+
 function IssueCard(props) {
+
+
+
+    const deleteIssue = async () => {
+        console.log(props.id);
+        const deleteIssue = await apis.removeIssue(props.id);
+    }
 
     return (
         <div>
@@ -11,16 +22,20 @@ function IssueCard(props) {
             <div className="issueCard__box">
                 <ErrorOutlineIcon fontSize="small" htmlColor="#22863a"/>
                 <div>
-                    <p className="issueCard__title">name1</p>
                     <Link to={{
-                        pathname: '/DiscussionThread',
-                        aboutProps: {
+                        pathname: `/${props.id}`,
+                        state: {
                             title: props.title,
-                        }
+                            id: props.id,
+                            name: props.name,
+                            issueDescription: props.body,
+                        },
                     }}>{props.title}</Link>
 
-                    <p className="issueCard__text">#Opened by darahas 4 hours go</p>
+                    <p>{props.body}</p>
+                    <p className="issueCard__text">{`#Opened by ${ props.name } at ${props.createdAt}`}</p>
                 </div>
+                <div className="delete-icon" onClick={deleteIssue}><DeleteIcon/></div>
             </div>
         </div>
     )

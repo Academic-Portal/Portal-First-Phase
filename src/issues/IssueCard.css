@@ -38,3 +38,7 @@ h3 {
     cursor: pointer;
     background-color: #eaecef;
 }
+
+.delete-icon {
+    margin-left: 0%;
+}

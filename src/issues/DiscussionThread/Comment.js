@@ -1,13 +1,21 @@
-import React from 'react';
-import './Comment.css';
+import React, {useEffect, useContext} from 'react'
+import '../IssueCard.css'
+import UserContext from '../../context/UserContext';
 
-const Issue = (props) => (
-    <div className="panel panel-default post-body">
-        <p className="user-name">name1</p>
-        <div className="panel-body">
-            {props.issueBody}
+function IssueCard(props) {
+
+    return (
+        <div>
+            
+            <div className="issueCard__box">
+                <div>
+                    <h6>{props.name} <p className="issueCard__text">{`commented on ${props.createdAt}`}</p></h6>
+                    <hr></hr>
+                    <p>{props.body}</p>
+                </div>
+            </div>
         </div>
-    </div>
-);
+    )
+}
 
-export default Issue;
+export default IssueCard

@@ -1,87 +1,112 @@
-import React, { Component } from 'react';
-import "./DiscussionThread.css";
-import { Button } from 'react-bootstrap';
-import Issue from './Comment';
-import NavBar from '../../NavBar';
+import React, { useEffect, useContext, useState } from 'react'
+import '../Issues.css';
+import IssueCard from './Comment.js';
 
-class DiscussionThread extends Component {
+import api from '../../service/index';
 
-    constructor(props) {
-        super(props);
+// authuntication
+import {useHistory, useLocation, useParams} from 'react-router-dom';
+import UserContext from '../../context/UserContext';
 
-        this.addIssue= this.addIssue.bind(this);
-        this.handleIssueEditorInputChange = this.handleIssueEditorInputChange.bind(this);
 
-        this.state = {
-            issues: [],
-            newIssueBody: '',
-        }
-    }
 
-    addIssue() {
-        const newState = Object.assign({}, this.state);
-        newState.issues.push(this.state.newIssueBody);
-        newState.newIssueBody = '';
-        this.setState(newState);
-        this.setState({
-            newIssueBody: '',
-        })
-    }
+export default function Issues() {
 
-    handleIssueEditorInputChange(e) {
-        this.setState({
-            newIssueBody: e.target.value,
-        })
-    }
+    const [issues, setIssues] = useState([{}]);
+    const [newIssueBody, setNewIssueBody] = useState('');
+
+
+    const {userData} = useContext(UserContext);
     
+    const history = useHistory();
+    const location = useLocation();
 
-    render() {
-        return (
+
+    const { title, id, issueDescription } = location.state;
+
+    async function fetchData () {
+
+        await api.getCommentsOfIssue(id).then(allIssues => {
+            setIssues(allIssues.data);
+        });
+
+    }
+
+
+    async function postData () {
+        var newIssue = {
+            issueId: id,
+            user: userData.user.displayName,
+            body: newIssueBody,
+        }
+
+        setNewIssueBody('');
+
+        await api.insertCommentOfIssue(id, newIssue);
+
+    }
+
+    useEffect(() => {
+
+        if(!userData.user) {
+            history.push("/login");
+        }
+
+        fetchData();
+    });
+
+
+    return (
+        <div>
             <div>
+                <div className="issues">
+                    <div className="issues__title">
+                        <h1>{ title } :</h1>
+                    </div>
 
-                <NavBar />
+                    <h3>{ issueDescription }</h3>
 
-                <div className="return-button-div">
-                    <Button variant="outlined" className="return-issues-button" href="/Issues">
-                        Return to Issues
-                    </Button>
-                </div>
-            
+                    <div className="issueCard__list">
+                        {   
+                        issues ?
+                            issues.map((issue, idx) => {
+                                return(
+                                    <IssueCard id={issue._id} title={issue.title} body={issue.body} name={issue.user} createdAt={issue.createdAt}/>
+                                );
+                            }) 
+                            
+                            :
+                            
+                            <h3>No comments</h3>
+                        }
+                    </div>
 
-                <div className="dicussion-title">
-                    
-                    <h2>
-                        {this.props.location.aboutProps.title}
-                    </h2>
-                </div>
-
-                { 
-                    this.state.issues.map((issueBody, idx) => {
-                        return (
-                            <Issue key={idx} issueBody={issueBody} />
-                        )
-                })
-                }
                 <div className="panel panel-default post-editor">
                     <div className="panel-body">
-                        <textarea   className="form-control post-editor-input" 
-                                    name="" id="" 
-                                    cols="30" 
-                                    rows="3"
-                                    placeholder="Comments go here..."
-                                    value={this.state.newIssueBody}
-                                    onChange={this.handleIssueEditorInputChange}
-                                    >
-                        </textarea>
-                        <button className="btn btn-success post-editor-button" 
-                                onClick={this.addIssue}>
-                            Post
-                        </button>
+                            <textarea   className="form-control post-editor-input" 
+                                        name="" id="" 
+                                        cols="30" 
+                                        rows="3"
+                                        placeholder='comment for issue goes here...'
+                                        value={newIssueBody}
+                                        onChange={e => {
+                                            setNewIssueBody(e.target.value);
+                                        }}
+                                        >
+                            </textarea>
+                            <button className="btn btn-success post-editor-button" 
+                                    onClick={e => {
+                                        postData();
+                                    }}>
+                                Post
+                            </button>
+                    </div>
+        
                     </div>
                 </div>
+
             </div>
         );
-    }
+        </div>
+    );
 }
-
-export default DiscussionThread;

@@ -1,59 +1,33 @@
-import React, {useState, useContext} from 'react';
+import React, {useContext} from 'react';
+import GoogleLogin from 'react-google-login';
 import UserContext from '../context/UserContext';
-import { useHistory } from 'react-router-dom';
-import Axios from 'axios';
 
 export default function Login() {
 
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
-    const [error, setError] = useState();
-    
-    const { setUserData } = useContext(UserContext);
-    const history = useHistory();
+    const {userData, setUserData} = useContext(UserContext);
 
-    const submit = async (e) => {
-
-        try {
-            e.preventDefault();
-            const loginUser = {email, password};
-            const loginRes = await Axios.post(
-                "http://localhost:5000/users/login", loginUser);
-            setUserData({
-                token: loginRes.data.token,
-                user: loginRes.data.user,
-            });
-            localStorage.setItem("auth-token", loginRes.data.token);
-            history.push("/");
-        } catch (err) {
-            if(err.response.data.msg) {
-                setError(err.response.data.msg);
+    const responseGoogle = (e) => {
+        
+        setUserData(userData => ({ 
+            ...userData,      
+            token: e.profileObj.googleId,
+            user: {
+                email: e.profileObj.email,
+                displayName: e.profileObj.name,
             }
-        }
-    };
+        }));
+
+        console.log(userData);
+    }
 
     return (
         <div className="page">
-            {/* {error && 
-                <ErrorNotice message={error} clearError={() => setError(undefined)}/>} */}
-            <h2>Log in</h2>
-            <form className="form" onSubmit={submit}>
-                <label htmlFor="login-email">Email</label>
-                <input 
-                    id="login-email" 
-                    type="email"
-                    onChange={e => setEmail(e.target.value)}
-                />
-
-                <label htmlFor="login-password">Password</label>
-                <input 
-                    id="login-password"
-                    type="password"
-                    onChange={e => setPassword(e.target.value)}    
-                />
-
-                <input type="submit" value="Login" />
-            </form>
+            <GoogleLogin
+            clientId="753929392522-t7al8gi7q8knpp3s8pdb40d556ni54qq.apps.googleusercontent.com"
+            buttonText="Login"
+            onSuccess={responseGoogle}
+            cookiePolicy={'single_host_origin'}
+            />
         </div>
     )
 }
