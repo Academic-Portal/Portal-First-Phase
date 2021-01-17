@@ -1,7 +1,7 @@
 import React from "react";
 import { Navbar, Nav, Form, Button, FormControl } from "react-bootstrap";
 
-function NavBar(){
+function NavBarHome(){
     return (
     <div>
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -25,4 +25,4 @@ function NavBar(){
     );
 }
 
-export default NavBar;
+export default NavBarHome;
