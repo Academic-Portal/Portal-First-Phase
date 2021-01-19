@@ -1,0 +1,10 @@
+.nav-links {
+    color: #ffffff;
+    padding: 1rem;
+
+}
+
+.nav-links:hover {
+    color: #ffffff;
+    text-decoration: none;
+}

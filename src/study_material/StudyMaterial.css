@@ -1,0 +1,13 @@
+.study-material-search{
+    width: 60%;
+    margin: 4%;
+}
+
+.study-material{
+    /* align: center; */
+    align-items: center;
+}
+
+.radiobtn{
+    padding-left: 3%;
+}
