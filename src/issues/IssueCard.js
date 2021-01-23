@@ -1,4 +1,4 @@
-import React, {useEffect, useContext} from 'react';
+import React, {useState} from 'react';
 import './IssueCard.css';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
@@ -9,10 +9,11 @@ import apis from '../service/index';
 
 function IssueCard(props) {
 
-
+    const [ userData, setUserData ] = useState(JSON.parse(localStorage.getItem('profile')));
 
     const deleteIssue = async () => {
-        console.log(props.id);
+        if(!window.confirm("you sure?"))
+            return null;
         const deleteIssue = await apis.removeIssue(props.id);
     }
 
@@ -35,7 +36,12 @@ function IssueCard(props) {
                     <p>{props.body}</p>
                     <p className="issueCard__text">{`#Opened by ${ props.name } at ${props.createdAt}`}</p>
                 </div>
-                <div className="delete-icon" onClick={deleteIssue}><DeleteIcon/></div>
+                {
+                    (userData.user.displayName === props.name)  ? 
+                        <div className="delete-icon" onClick={deleteIssue}><DeleteIcon/></div> :
+
+                        <div></div>
+                }
             </div>
         </div>
     )

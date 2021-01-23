@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import {Redirect} from 'react-router-dom';
 
 import axios from 'axios';
+import './UploadStyles.css';
+import Navbar from '../NavBar';
 
 class UploadMetadata extends Component {
     constructor(props) {
@@ -100,39 +102,43 @@ class UploadMetadata extends Component {
 
         if(loading){
           return (
+            <div>
+            <Navbar />
             <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" />
+            </div>
           )
         }
 
           return(
             <div>
-                <div classname="jumbotron">
-                <h1 classname="display-4"> Upload files </h1>
+              <Navbar />
+                <div className="jumbotron">
+                <h1 className="display-4"> Upload files </h1>
                 </div>
-                <div classname="panel-body container" >
-                    <form onSubmit={this.handleSubmit} classname="form-horizontal">
-                    <div classname="form-group">
-                        <label for="icode" classname="col-md-3 control-label">File Name</label>
-                         <div classname="col-md-9">
-                        <input type="text" value={filename} onChange={this.handleInputChange} classname="form-control" name="filename" />
+                <div className="panel-body container" >
+                    <form onSubmit={this.handleSubmit} className="form-horizontal">
+                    <div className="form-group">
+                        <label for="icode" className="col-md-3 control-label">File Name</label>
+                         <div className="col-md-9">
+                        <input type="text" value={filename} onChange={this.handleInputChange} className="form-control" name="filename" />
                         </div>
                 </div>
-                <div classname="form-group">
-                <label for="icode" classname="col-md-3 control-label">Course No</label>
-                <div classname="col-md-9">
-                    <input type="text" value={courseno} onChange={this.handleInputChange} classname="form-control" name="courseno" />
+                <div className="form-group">
+                <label for="icode" className="col-md-3 control-label">Course No</label>
+                <div className="col-md-9">
+                    <input type="text" value={courseno} onChange={this.handleInputChange} className="form-control" name="courseno" />
                 </div>
                 </div>
-                <div classname="form-group">
-                <label for="icode" classname="col-md-3 control-label">Branch</label>
-                <div classname="col-md-9">
-                    <input type="text" value={branch} onChange={this.handleInputChange} classname="form-control" name="branch" />
+                <div className="form-group">
+                <label for="icode" className="col-md-3 control-label">Branch</label>
+                <div className="col-md-9">
+                    <input type="text" value={branch} onChange={this.handleInputChange} className="form-control" name="branch" />
                 </div>
                 </div>
-                <div classname="form-group">
-                <label for="icode" classname="col-md-3 control-label">Name</label>
-                <div classname="col-md-9">
-                    <input type="text" value={name} onChange={this.handleInputChange} classname="form-control" name="name" />
+                <div className="form-group">
+                <label for="icode" className="col-md-3 control-label">Name</label>
+                <div className="col-md-9">
+                    <input type="text" value={name} onChange={this.handleInputChange} className="form-control" name="name" />
                 </div>
                 </div>
                 <div className="radio radiobtn">
@@ -149,14 +155,14 @@ class UploadMetadata extends Component {
               // checked={this.state.selectedOption === "Option3"}
               onChange={this.handleInputChange} type="radio"  />Course Material</label>
             </div>
-                <div classname="form-group">
-                    <label for="icode" classname="col-md-3 control-label">File</label>
-                    <div classname="col-md-9">
-                    <input type="file" onChange={this.onFileChange} classname="form-control" name="file" accept="application/pdf" />
+                <div className="form-group">
+                    <label for="icode" className="col-md-3 control-label">File</label>
+                    <div className="col-md-9">
+                    <input type="file" onChange={this.onFileChange} className="form-control" name="file" accept="application/pdf" />
                 </div>
                 </div>
                 
-                <button type="submit">Submit</button>
+                <button type="submit" className="Submitbtn">Submit</button>
                 </form>
                 </div>
             </div>

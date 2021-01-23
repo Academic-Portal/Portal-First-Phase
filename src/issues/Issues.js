@@ -7,7 +7,7 @@ import api from '../service/index';
 // authuntication
 import {useHistory} from 'react-router-dom';
 import UserContext from '../context/UserContext';
-
+import Navbar from '../NavBar';
 
 
 export default function Issues() {
@@ -17,7 +17,7 @@ export default function Issues() {
     const [newIssueBody, setNewIssueBody] = useState('');
 
 
-    const {userData} = useContext(UserContext);
+    const [ userData, setUserData ] = useState(JSON.parse(localStorage.getItem('profile')));
     const history = useHistory();
 
     async function fetchData () {
@@ -54,6 +54,7 @@ export default function Issues() {
 
     return (
         <div>
+            <Navbar />
             <div>
                 <div className="issues">
                     <div className="issues__title">

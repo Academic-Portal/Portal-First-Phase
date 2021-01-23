@@ -1,5 +1,6 @@
-.carousel{
-    max-width: 70%;
-    max-height: 10%;
-    margin: auto;
+.carousel {
+  max-width: 70%;
+  height : 100vh;
+  margin: auto;
+  margin-top: 5px;
 }

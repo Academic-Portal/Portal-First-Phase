@@ -12,6 +12,7 @@ function CarouselHome(){
                 className="d-block w-100"
                 src={image1}
                 alt="First slide"
+                height="50%"
             />
             <Carousel.Caption>
                 <h3>Hello</h3>
@@ -23,6 +24,7 @@ function CarouselHome(){
                 className="d-block w-100"
                 src={image2}
                 alt="Second slide"
+                height="50%"
             />
             <Carousel.Caption>
                 <h3>Hello</h3>

@@ -1,14 +1,12 @@
-import React, {useContext} from "react";
+import React, {useState} from "react";
 import { GoogleLogout } from 'react-google-login';
 import { Navbar, Nav, Form, Button, FormControl } from "react-bootstrap";
 import {useHistory, Link} from 'react-router-dom';
 import './NavBar.css';
 
-import UserContext from './context/UserContext';
-
 function NavBar() {
 
-    const {userData, setUserData} = useContext(UserContext);
+    const [ userData, setUserData ] = useState(JSON.parse(localStorage.getItem('profile')));
 
     const history = useHistory();
 
@@ -25,7 +23,9 @@ function NavBar() {
             token: undefined,
             user: undefined,
         });
-        // localStorage.setItem("auth-token", "");
+        localStorage.setItem('profile', JSON.stringify({token: undefined, user: undefined})); 
+
+        history.push("/login");
     }
 
     return (
@@ -45,8 +45,6 @@ function NavBar() {
                         >
                         </GoogleLogout> :
                         <>
-                            <Button onClick={register}>Register</Button>
-                            <Button onClick={login}>Login</Button>
                         </>
                     }
 

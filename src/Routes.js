@@ -3,8 +3,6 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import Home from './home/Home';
 
-import Navbar from './NavBar';
-
 import Login from './auth/Login';
 import Register from './auth/Register';
 
@@ -20,7 +18,7 @@ function Routes() {
       <div>
     <BrowserRouter>
       {/* <Switch> */}
-      <Navbar />
+      
         <Route exact path="/" component={Home} />
 
         {/* Home component */}
@@ -28,7 +26,7 @@ function Routes() {
 
         {/* Auth */}
         <Route path="/login" component={Login} />
-        <Route path="/register" component={Register} />
+        
 
         {/* Issues component */}
         <Route path="/Issues" component={Issues} />

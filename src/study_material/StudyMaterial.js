@@ -4,7 +4,8 @@ import './StudyMaterial.css';
 import './Trial.css';
 import {Redirect} from 'react-router-dom';
 import TableHeader from './TableHeader';
-import UserContext from '../context/UserContext'
+import UserContext from '../context/UserContext';
+import Navbar from '../NavBar';
 
 
 import axios from 'axios';
@@ -45,8 +46,8 @@ class StudyMaterial extends Component {
   }
   static contextType = UserContext
     componentDidMount(){
-      const userData = this.context;
-      if(!userData.userData.user){
+      const userData = JSON.parse(localStorage.getItem('profile'));
+      if(!userData.user){
         this.setState({loggedIn: false})
       }
       else{
@@ -114,6 +115,7 @@ render() {
 
     return(
         <div>
+          <Navbar />
               <h2 style={{textAlign:'center'}}>StudyMaterial</h2>
 
               <form onSubmit={this.handleSubmit} className="study-material" >
